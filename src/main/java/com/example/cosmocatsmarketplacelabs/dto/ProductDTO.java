@@ -1,5 +1,6 @@
 package com.example.cosmocatsmarketplacelabs.dto;
 
+import com.example.cosmocatsmarketplacelabs.dto.validation.ValidSpaceCategory;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class ProductDTO {
     private Double price;
 
     @NotEmpty(message = "Category can't be empty")
+    @ValidSpaceCategory
     private List<String> categories;
 
 }
