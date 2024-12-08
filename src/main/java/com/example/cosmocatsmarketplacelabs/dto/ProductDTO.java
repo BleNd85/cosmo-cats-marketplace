@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +28,6 @@ public class ProductDTO {
 
     @NotEmpty(message = "Category can't be empty")
     @ValidSpaceCategory
-    private List<String> categories;
+    private String category;
 
 }

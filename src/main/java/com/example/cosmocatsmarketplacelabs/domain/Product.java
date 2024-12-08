@@ -14,6 +14,6 @@ public class Product {
     private Long id;
     private Double price;
     private String name;
-    private CategoryType categories;
+    private CategoryType category;
     private String description;
 }

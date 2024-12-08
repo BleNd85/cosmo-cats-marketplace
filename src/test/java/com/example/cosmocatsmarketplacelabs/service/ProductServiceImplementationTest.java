@@ -50,7 +50,7 @@ public class ProductServiceImplementationTest {
         Product newProduct = Product.builder()
                 .id(1L)
                 .name("Updated Космічне молоко")
-                .categories(CategoryType.COSMOFOOD)
+                .category(CategoryType.COSMOFOOD)
                 .description("Updated description")
                 .price(99.99)
                 .build();
@@ -59,7 +59,7 @@ public class ProductServiceImplementationTest {
         assertEquals(newProduct.getName(), result.getName());
         assertEquals(newProduct.getDescription(), result.getDescription());
         assertEquals(newProduct.getPrice(), result.getPrice());
-        assertEquals(newProduct.getCategories(), result.getCategories());
+        assertEquals(newProduct.getCategory(), result.getCategory());
     }
 
     @Test
