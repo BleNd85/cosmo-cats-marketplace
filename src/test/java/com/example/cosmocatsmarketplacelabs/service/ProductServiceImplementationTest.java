@@ -50,7 +50,7 @@ public class ProductServiceImplementationTest {
         Product newProduct = Product.builder()
                 .id(1L)
                 .name("Updated Космічне молоко")
-                .categories(List.of(CategoryType.COSMOFOOD))
+                .categories(CategoryType.COSMOFOOD)
                 .description("Updated description")
                 .price(99.99)
                 .build();

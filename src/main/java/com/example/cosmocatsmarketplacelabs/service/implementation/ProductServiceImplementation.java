@@ -53,37 +53,37 @@ public class ProductServiceImplementation implements ProductService {
         listOfProducts.add(Product.builder()
                 .id(1L)
                 .name("Космічне молоко")
-                .categories(List.of(CategoryType.COSMOFOOD))
+                .categories(CategoryType.COSMOFOOD)
                 .description("Молоко космічної корови")
                 .build());
         listOfProducts.add(Product.builder()
                 .id(2L)
                 .name("Котячий скафандр")
-                .categories(List.of(CategoryType.CLOTHES))
+                .categories(CategoryType.CLOTHES)
                 .description("Спеціальний скафандр, що ІДЕАЛЬНО підходить для космічних котиків")
                 .build());
         listOfProducts.add(Product.builder()
                 .id(3L)
                 .name("Космічна хапалка")
-                .categories(List.of(CategoryType.DEVICES))
+                .categories(CategoryType.DEVICES)
                 .description("Котячий прилад, який допомагає космічним котикам у дослідах(У них же лапки!)")
                 .build());
         listOfProducts.add(Product.builder()
                 .id(4L)
                 .name("Антигравітаційний клубок ниток")
-                .categories(List.of(CategoryType.TOYS))
+                .categories(CategoryType.TOYS)
                 .description("Літаючий клубок, що слідує за котиком, змінює кольори і дарує невагомі ігри в космосі!")
                 .build());
         listOfProducts.add(Product.builder()
                 .id(5L)
                 .name("Жетон справжнього котика-космонавта")
-                .categories(List.of(CategoryType.ACCESSORIES))
+                .categories(CategoryType.ACCESSORIES)
                 .description("Блискучий символ галактичної відваги, який посвідчує, що його власник побував серед зірок і не раз ловив астероїди на льоту!")
                 .build());
         listOfProducts.add(Product.builder()
                 .id(6L)
                 .name("Шерсть космічного котика")
-                .categories(List.of(CategoryType.OTHER))
+                .categories(CategoryType.OTHER)
                 .description("Легендарний матеріал, що переливається зоряним пилом, гріє в холод вакууму і ідеально підходить для плетіння міжгалактичних теплих шкарпеток!")
                 .build());
         return listOfProducts;
