@@ -18,8 +18,8 @@ ext {
     // Minimal Coverage
     minimumCoveragePerFile = 0.8
     filesExcludedFromCoverage = [
-            "/*CosmoCatsMarketplaceLabs.*",
-            "/config/*Configuration.*"
+            "**/*CosmoCatsMarketplaceLabs.*",
+            "**/config/*Configuration.*"
     ]
     springCloudVersion = "2024.0.0"
 }

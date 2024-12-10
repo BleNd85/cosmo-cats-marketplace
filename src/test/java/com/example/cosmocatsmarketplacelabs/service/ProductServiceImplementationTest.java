@@ -3,14 +3,21 @@ package com.example.cosmocatsmarketplacelabs.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.cosmocatsmarketplacelabs.common.CategoryType;
+import com.example.cosmocatsmarketplacelabs.config.MappersTestConfiguration;
 import com.example.cosmocatsmarketplacelabs.domain.Product;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
 import com.example.cosmocatsmarketplacelabs.service.implementation.ProductServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
+@SpringBootTest(classes = {ProductServiceImplementation.class})
+@Import({MappersTestConfiguration.class})
+@DisplayName("Product Service Test")
 public class ProductServiceImplementationTest {
     private ProductServiceImplementation productService;
 

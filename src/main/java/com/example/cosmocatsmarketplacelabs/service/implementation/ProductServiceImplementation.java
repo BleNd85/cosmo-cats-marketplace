@@ -35,7 +35,8 @@ public class ProductServiceImplementation implements ProductService {
 
     @Override
     public Product updateProduct(Product product) {
-        Product oldProduct = getProductById(product.getId());
+        Product oldProduct = listOfProducts.stream()
+                .filter(updatedProduct -> updatedProduct.getId().equals(product.getId())).findFirst().orElseThrow(() -> new ProductNotFoundException(product.getId()));
         oldProduct.setCategory(product.getCategory());
         oldProduct.setName(product.getName());
         oldProduct.setDescription(product.getDescription());
@@ -44,9 +45,13 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     @Override
-    public String deleteProductById(Long id) {
+    public void deleteProductById(Long id) {
         listOfProducts.remove(getProductById(id));
-        return "Product was successfully deleted";
+    }
+
+    @Override
+    public void cleanProductList() {
+        listOfProducts.clear();
     }
 
     private List<Product> createProductList() {

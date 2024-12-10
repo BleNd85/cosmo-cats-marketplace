@@ -9,5 +9,4 @@ public class CosmoCatsMarketplaceLabsApplication {
     public static void main(String[] args) {
         SpringApplication.run(CosmoCatsMarketplaceLabsApplication.class, args);
     }
-
 }
