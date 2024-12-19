@@ -1,6 +1,8 @@
 package com.example.cosmocatsmarketplacelabs.dto;
 
+import com.example.cosmocatsmarketplacelabs.dto.validation.ExtendedValidation;
 import com.example.cosmocatsmarketplacelabs.dto.validation.ValidSpaceCategory;
+import jakarta.validation.GroupSequence;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
+@GroupSequence({ProductDTO.class, ExtendedValidation.class})
 public class ProductDTO {
 
     @NotBlank(message = "Name is mandatory")
@@ -27,7 +30,7 @@ public class ProductDTO {
     private Double price;
 
     @NotEmpty(message = "Category can't be empty")
-    @ValidSpaceCategory
+    @ValidSpaceCategory(groups = ExtendedValidation.class)
     private String category;
 
 }

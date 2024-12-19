@@ -7,9 +7,9 @@ import com.example.cosmocatsmarketplacelabs.config.MappersTestConfiguration;
 import com.example.cosmocatsmarketplacelabs.domain.Product;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
 import com.example.cosmocatsmarketplacelabs.service.implementation.ProductServiceImplementation;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
@@ -19,12 +19,8 @@ import java.util.List;
 @Import({MappersTestConfiguration.class})
 @DisplayName("Product Service Test")
 public class ProductServiceImplementationTest {
+    @Autowired
     private ProductServiceImplementation productService;
-
-    @BeforeEach
-    public void setUp() {
-        productService = new ProductServiceImplementation();
-    }
 
     @Test
     void testGetAllProducts() {
@@ -54,13 +50,7 @@ public class ProductServiceImplementationTest {
 
     @Test
     void testUpdateProduct() {
-        Product newProduct = Product.builder()
-                .id(1L)
-                .name("Updated Космічне молоко")
-                .category(CategoryType.COSMOFOOD)
-                .description("Updated description")
-                .price(99.99)
-                .build();
+        Product newProduct = Product.builder().id(1L).name("Updated Космічне молоко").category(CategoryType.COSMOFOOD).description("Updated description").price(99.99).build();
         Product result = productService.updateProduct(newProduct);
         assertNotNull(result);
         assertEquals(newProduct.getName(), result.getName());
