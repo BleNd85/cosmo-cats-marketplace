@@ -2,6 +2,8 @@ package com.example.cosmocatsmarketplacelabs.web;
 
 import com.example.cosmocatsmarketplacelabs.domain.Product;
 import com.example.cosmocatsmarketplacelabs.dto.ProductDTO;
+import com.example.cosmocatsmarketplacelabs.featuretoggle.FeatureToggles;
+import com.example.cosmocatsmarketplacelabs.featuretoggle.annotation.FeatureToggle;
 import com.example.cosmocatsmarketplacelabs.service.ProductService;
 import com.example.cosmocatsmarketplacelabs.service.mapper.ProductMapper;
 import jakarta.validation.Valid;
@@ -21,6 +23,7 @@ public class ProductController {
         this.productMapper = productMapper;
     }
 
+    @FeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     @GetMapping()
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         return ResponseEntity.ok(productMapper.toProductDtoList(productService.getAllProducts()));
