@@ -3,6 +3,10 @@ package com.example.cosmocatsmarketplacelabs.web;
 import com.example.cosmocatsmarketplacelabs.common.CategoryType;
 import com.example.cosmocatsmarketplacelabs.domain.Product;
 import com.example.cosmocatsmarketplacelabs.dto.ProductDTO;
+import com.example.cosmocatsmarketplacelabs.featuretoggle.FeatureToggleExtension;
+import com.example.cosmocatsmarketplacelabs.featuretoggle.FeatureToggles;
+import com.example.cosmocatsmarketplacelabs.featuretoggle.annotation.DisabledFeatureToggle;
+import com.example.cosmocatsmarketplacelabs.featuretoggle.annotation.EnabledFeatureToggle;
 import com.example.cosmocatsmarketplacelabs.service.ProductService;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
 import com.example.cosmocatsmarketplacelabs.service.mapper.ProductMapper;
@@ -10,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -35,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @DisplayName("Order Controller IT")
+@ExtendWith(FeatureToggleExtension.class)
 public class ProductControllerIT {
     private ProductDTO productDTO;
     private Product mockProduct;
@@ -72,6 +78,19 @@ public class ProductControllerIT {
     }
 
     @Test
+    @DisabledFeatureToggle(FeatureToggles.KITTY_PRODUCTS)
+    void shouldReturnAllProductsDisabled() throws Exception {
+        mockMvc.perform(get("/api/v1/products")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisabledFeatureToggle(FeatureToggles.KITTY_PRODUCTS)
+    void shouldReturnProductByIdDisabled() throws Exception {
+        mockMvc.perform(get("/api/v1/products/" + PRODUCT_ID)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    @EnabledFeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     void shouldReturnAllProducts() throws Exception {
         when(productService.getAllProducts()).thenReturn(buildProductList());
         mockMvc.perform(get("/api/v1/products")
@@ -88,6 +107,7 @@ public class ProductControllerIT {
     }
 
     @Test
+    @EnabledFeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     void shouldReturnProductById() throws Exception {
         when(productService.getProductById(PRODUCT_ID)).thenReturn(mockProduct);
 
@@ -102,6 +122,7 @@ public class ProductControllerIT {
     }
 
     @Test
+    @EnabledFeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     void shouldThrowProductNotFoundException() throws Exception {
         when(productService.getProductById(any())).thenThrow(ProductNotFoundException.class);
         mockMvc.perform(get("/api/v1/products/{id}", 10000L)
@@ -111,6 +132,7 @@ public class ProductControllerIT {
     }
 
     @Test
+    @EnabledFeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     void shouldCreateProduct() throws Exception {
         when(productService.createProduct(any(Product.class))).thenReturn(mockProduct);
 
@@ -127,6 +149,7 @@ public class ProductControllerIT {
 
     @ParameterizedTest
     @MethodSource("invalidProductDTOs")
+    @EnabledFeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     void shouldThrowValidationErrorCreateProduct(ProductDTO productDTO, String fieldName, String message) throws Exception {
         mockMvc.perform(post("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON)
