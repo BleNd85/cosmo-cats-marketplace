@@ -1,5 +1,6 @@
 package com.example.cosmocatsmarketplacelabs.web;
 
+import com.example.cosmocatsmarketplacelabs.featuretoggle.exception.FeatureToggleNotEnabledException;
 import com.example.cosmocatsmarketplacelabs.service.exception.ParamsViolationException;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,15 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         problemDetail.setType(create("product-not-found"));
         problemDetail.setTitle("Product Not Found");
         return ResponseEntity.status(NOT_FOUND).body(problemDetail);
+    }
+
+    @ExceptionHandler(FeatureToggleNotEnabledException.class)
+    ProblemDetail handleFeatureToggleNotEnabledException(FeatureToggleNotEnabledException ex) {
+        log.info("Feature is not enabled");
+        ProblemDetail problemDetail = forStatusAndDetail(NOT_FOUND, ex.getMessage());
+        problemDetail.setType(create("feature-disabled"));
+        problemDetail.setTitle("Feature is disabled");
+        return problemDetail;
     }
 
     @Override

@@ -30,9 +30,9 @@ public class ProductServiceImplementationTest {
 
     @Test
     void testGetProductById() {
-        Product product = productService.getProductById(1L);
+        Product product = productService.getProductById(2L);
         assertNotNull(product);
-        assertEquals(1L, product.getId());
+        assertEquals(2L, product.getId());
     }
 
     @Test
