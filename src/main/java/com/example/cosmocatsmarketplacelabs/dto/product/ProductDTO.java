@@ -1,4 +1,4 @@
-package com.example.cosmocatsmarketplacelabs.dto;
+package com.example.cosmocatsmarketplacelabs.dto.product;
 
 import com.example.cosmocatsmarketplacelabs.dto.validation.ExtendedValidation;
 import com.example.cosmocatsmarketplacelabs.dto.validation.ValidSpaceCategory;
@@ -10,12 +10,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
 @GroupSequence({ProductDTO.class, ExtendedValidation.class})
 public class ProductDTO {
+
+    private UUID productReference;
+
     @Schema(description = "Name of the product")
     @NotBlank(message = "Name is mandatory")
     @Size(max = 100, message = "Name can't be more than 100 symbols")

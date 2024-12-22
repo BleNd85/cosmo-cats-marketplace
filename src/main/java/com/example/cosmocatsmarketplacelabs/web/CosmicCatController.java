@@ -1,10 +1,10 @@
 package com.example.cosmocatsmarketplacelabs.web;
 
-import com.example.cosmocatsmarketplacelabs.dto.CosmicCatDTO;
+import com.example.cosmocatsmarketplacelabs.dto.cat.CosmicCatDto;
 import com.example.cosmocatsmarketplacelabs.featuretoggle.FeatureToggles;
 import com.example.cosmocatsmarketplacelabs.featuretoggle.annotation.FeatureToggle;
 import com.example.cosmocatsmarketplacelabs.service.CosmicCatService;
-import com.example.cosmocatsmarketplacelabs.service.mapper.CosmicCatMapper;
+import com.example.cosmocatsmarketplacelabs.service.mapper.CosmicCatServiceMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,16 +16,16 @@ import java.util.List;
 @RequestMapping("api/v1/cosmic-cats")
 public class CosmicCatController {
     private final CosmicCatService cosmicCatService;
-    private final CosmicCatMapper cosmicCatMapper;
+    private final CosmicCatServiceMapper cosmicCatServiceMapper;
 
-    public CosmicCatController(CosmicCatService cosmicCatService, CosmicCatMapper cosmicCatMapper) {
+    public CosmicCatController(CosmicCatService cosmicCatService, CosmicCatServiceMapper cosmicCatServiceMapper) {
         this.cosmicCatService = cosmicCatService;
-        this.cosmicCatMapper = cosmicCatMapper;
+        this.cosmicCatServiceMapper = cosmicCatServiceMapper;
     }
 
     @FeatureToggle(FeatureToggles.COSMO_CATS)
     @GetMapping
-    public ResponseEntity<List<CosmicCatDTO>> getCosmicCats() {
-        return ResponseEntity.ok(cosmicCatMapper.toCosmicCatDTO(cosmicCatService.getAllCosmicCats()));
+    public ResponseEntity<List<CosmicCatDto>> getCosmicCats() {
+        return ResponseEntity.ok(cosmicCatServiceMapper.toCosmicCatDTO(cosmicCatService.getAllCosmicCats()));
     }
 }

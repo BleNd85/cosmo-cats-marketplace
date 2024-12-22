@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayName("CosmicCat Controller IT")
 @ExtendWith(FeatureToggleExtension.class)
-public class CosmicCatControllerIT {
+public class CosmicCatDetailsControllerIT {
     @Autowired
     MockMvc mockMvc;
 

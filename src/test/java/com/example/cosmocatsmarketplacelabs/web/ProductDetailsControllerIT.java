@@ -1,15 +1,15 @@
 package com.example.cosmocatsmarketplacelabs.web;
 
 import com.example.cosmocatsmarketplacelabs.common.CategoryType;
-import com.example.cosmocatsmarketplacelabs.domain.Product;
-import com.example.cosmocatsmarketplacelabs.dto.ProductDTO;
+import com.example.cosmocatsmarketplacelabs.domain.ProductDetails;
+import com.example.cosmocatsmarketplacelabs.dto.product.ProductDTO;
 import com.example.cosmocatsmarketplacelabs.featuretoggle.FeatureToggleExtension;
 import com.example.cosmocatsmarketplacelabs.featuretoggle.FeatureToggles;
 import com.example.cosmocatsmarketplacelabs.featuretoggle.annotation.DisabledFeatureToggle;
 import com.example.cosmocatsmarketplacelabs.featuretoggle.annotation.EnabledFeatureToggle;
 import com.example.cosmocatsmarketplacelabs.service.ProductService;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
-import com.example.cosmocatsmarketplacelabs.service.mapper.ProductMapper;
+import com.example.cosmocatsmarketplacelabs.service.mapper.ProductServiceMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,9 +41,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayName("Order Controller IT")
 @ExtendWith(FeatureToggleExtension.class)
-public class ProductControllerIT {
+public class ProductDetailsControllerIT {
     private ProductDTO productDTO;
-    private Product mockProduct;
+    private ProductDetails mockProductDetails;
     private final Long PRODUCT_ID = 1L;
     private final List<ProductDTO> productListDto = buildProductDTOList();
     @Autowired
@@ -53,7 +53,7 @@ public class ProductControllerIT {
     private ProductService productService;
 
     @Autowired
-    private ProductMapper productMapper;
+    private ProductServiceMapper productServiceMapper;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -61,10 +61,10 @@ public class ProductControllerIT {
     @BeforeEach
     void setUp() {
         productService.cleanProductList();
-        mockProduct = Product.builder()
+        mockProductDetails = ProductDetails.builder()
                 .id(1L)
                 .name("Космічне молоко")
-                .category(CategoryType.COSMOFOOD)
+                .categoryType(CategoryType.COSMOFOOD)
                 .description("Молоко космічної корови")
                 .price(99.99)
                 .build();
@@ -98,18 +98,18 @@ public class ProductControllerIT {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(productListDto.size())))
-                .andExpect(jsonPath("$[0].name").value(productMapper.toProduct(productListDto.get(0)).getName()))
-                .andExpect(jsonPath("$[0].category").value((productMapper.toProduct(productListDto.get(0)).getCategory().getDisplayName())))
-                .andExpect(jsonPath("$[1].name").value(productMapper.toProduct(productListDto.get(1)).getName()))
-                .andExpect(jsonPath("$[1].category").value(productMapper.toProduct(productListDto.get(1)).getCategory().getDisplayName()))
-                .andExpect(jsonPath("$[2].name").value(productMapper.toProduct(productListDto.get(2)).getName()))
-                .andExpect(jsonPath("$[2].category").value(productMapper.toProduct(productListDto.get(2)).getCategory().getDisplayName()));
+                .andExpect(jsonPath("$[0].name").value(productServiceMapper.toProductDetails(productListDto.get(0)).getName()))
+                .andExpect(jsonPath("$[0].category").value((productServiceMapper.toProductDetails(productListDto.get(0)).getCategoryType().getDisplayName())))
+                .andExpect(jsonPath("$[1].name").value(productServiceMapper.toProductDetails(productListDto.get(1)).getName()))
+                .andExpect(jsonPath("$[1].category").value(productServiceMapper.toProductDetails(productListDto.get(1)).getCategoryType().getDisplayName()))
+                .andExpect(jsonPath("$[2].name").value(productServiceMapper.toProductDetails(productListDto.get(2)).getName()))
+                .andExpect(jsonPath("$[2].category").value(productServiceMapper.toProductDetails(productListDto.get(2)).getCategoryType().getDisplayName()));
     }
 
     @Test
     @EnabledFeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     void shouldReturnProductById() throws Exception {
-        when(productService.getProductById(PRODUCT_ID)).thenReturn(mockProduct);
+        when(productService.getProductById(PRODUCT_ID)).thenReturn(mockProductDetails);
 
         mockMvc.perform(get("/api/v1/products/{id}", PRODUCT_ID)
                         .accept(MediaType.APPLICATION_JSON)
@@ -134,7 +134,7 @@ public class ProductControllerIT {
     @Test
     @EnabledFeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     void shouldCreateProduct() throws Exception {
-        when(productService.createProduct(any(Product.class))).thenReturn(mockProduct);
+        when(productService.createProduct(any(ProductDetails.class))).thenReturn(mockProductDetails);
 
         mockMvc.perform(post("/api/v1/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -187,9 +187,9 @@ public class ProductControllerIT {
                 .category("CosmoFood")
                 .description("Молоко космічної корови")
                 .build();
-        Product updatedProduct = productMapper.toProduct(updatedDTO);
+        ProductDetails updatedProductDetails = productServiceMapper.toProductDetails(updatedDTO);
 
-        when(productService.updateProduct(any(Product.class))).thenReturn(updatedProduct);
+        when(productService.updateProduct(any(ProductDetails.class))).thenReturn(updatedProductDetails);
 
         mockMvc.perform(put("/api/v1/products/{id}", PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -222,7 +222,7 @@ public class ProductControllerIT {
                 .category("CosmoFood")
                 .description("Молоко космічної корови, якого не існує")
                 .build();
-        when(productService.updateProduct(any(Product.class))).thenThrow(ProductNotFoundException.class);
+        when(productService.updateProduct(any(ProductDetails.class))).thenThrow(ProductNotFoundException.class);
         mockMvc.perform(put("/api/v1/products/{id}", 10000L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -254,20 +254,20 @@ public class ProductControllerIT {
         return listOfProducts;
     }
 
-    private List<Product> buildProductList() {
+    private List<ProductDetails> buildProductList() {
         return buildProductDTOList().stream()
-                .map(dto -> productMapper.toProduct(dto)).collect(Collectors.toList());
+                .map(dto -> productServiceMapper.toProductDetails(dto)).collect(Collectors.toList());
     }
 
     private static Stream<Arguments> invalidProductDTOs() {
         return Stream.of(
                 Arguments.of(ProductDTO.builder()
                                 .name("Котячий скафандр")
-                                .category("Wrong category")
+                                .category("Wrong categoryType")
                                 .price(1000.0)
                                 .description("Котячий скафандр з неправильною категорією")
-                                .build(), "category",
-                        "Invalid Space Category it must be: CosmoFood, Clothes, Devices, Toys, Accessories, or Other if you didn't find right category"),
+                                .build(), "categoryType",
+                        "Invalid Space Category it must be: CosmoFood, Clothes, Devices, Toys, Accessories, or Other if you didn't find right categoryType"),
                 Arguments.of(ProductDTO.builder()
                                 .name("")
                                 .category("Clothes")

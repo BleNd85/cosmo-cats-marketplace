@@ -6,14 +6,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Product {
+@Builder(toBuilder = true)
+public class ProductDetails {
     Long id;
+    UUID productReference;
     Double price;
     String name;
-    CategoryType category;
+    CategoryType categoryType;
     String description;
 }

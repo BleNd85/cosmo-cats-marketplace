@@ -1,10 +1,10 @@
 package com.example.cosmocatsmarketplacelabs.service;
 
 
-import com.example.cosmocatsmarketplacelabs.domain.CosmicCat;
+import com.example.cosmocatsmarketplacelabs.domain.CosmicCatDetails;
 
 import java.util.List;
 
 public interface CosmicCatService {
-    List<CosmicCat> getAllCosmicCats();
+    List<CosmicCatDetails> getAllCosmicCats();
 }

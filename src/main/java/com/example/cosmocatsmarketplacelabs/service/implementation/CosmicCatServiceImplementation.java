@@ -1,6 +1,6 @@
 package com.example.cosmocatsmarketplacelabs.service.implementation;
 
-import com.example.cosmocatsmarketplacelabs.domain.CosmicCat;
+import com.example.cosmocatsmarketplacelabs.domain.CosmicCatDetails;
 import com.example.cosmocatsmarketplacelabs.service.CosmicCatService;
 import org.springframework.stereotype.Service;
 
@@ -8,28 +8,28 @@ import java.util.List;
 
 @Service
 public class CosmicCatServiceImplementation implements CosmicCatService {
-    private final List<CosmicCat> cosmicCats = createCosmicCats();
+    private final List<CosmicCatDetails> cosmicCatDetails = createCosmicCats();
 
     @Override
-    public List<CosmicCat> getAllCosmicCats() {
-        return cosmicCats;
+    public List<CosmicCatDetails> getAllCosmicCats() {
+        return cosmicCatDetails;
     }
 
-    private List<CosmicCat> createCosmicCats() {
+    private List<CosmicCatDetails> createCosmicCats() {
         return List.of(
-                CosmicCat.builder()
+                CosmicCatDetails.builder()
                         .id(1L)
                         .catName("Marsik")
                         .realName("Mars Barsovych")
                         .catMail("marsik12@gmail.com")
                         .build(),
-                CosmicCat.builder()
+                CosmicCatDetails.builder()
                         .id(2L)
                         .catName("Termopricon")
                         .realName("Pricon Termo")
                         .catMail("termopricon7@gmail.com")
                         .build(),
-                CosmicCat.builder()
+                CosmicCatDetails.builder()
                         .id(3L)
                         .catName("Cyberpatron")
                         .realName("Paton Cyberious")

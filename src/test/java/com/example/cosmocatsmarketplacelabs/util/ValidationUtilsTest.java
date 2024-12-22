@@ -1,4 +1,4 @@
-package util;
+package com.example.cosmocatsmarketplacelabs.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
 import org.springframework.web.context.request.WebRequest;
+import util.ValidationUtils;
 
 import java.util.List;
 

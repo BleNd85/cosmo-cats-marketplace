@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.cosmocatsmarketplacelabs.common.CategoryType;
 import com.example.cosmocatsmarketplacelabs.config.MappersTestConfiguration;
-import com.example.cosmocatsmarketplacelabs.domain.Product;
+import com.example.cosmocatsmarketplacelabs.domain.ProductDetails;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
 import com.example.cosmocatsmarketplacelabs.service.implementation.ProductServiceImplementation;
 import org.junit.jupiter.api.DisplayName;
@@ -18,21 +18,21 @@ import java.util.List;
 @SpringBootTest(classes = {ProductServiceImplementation.class})
 @Import({MappersTestConfiguration.class})
 @DisplayName("Product Service Test")
-public class ProductServiceImplementationTest {
+public class ProductDetailsServiceImplementationTest {
     @Autowired
     private ProductServiceImplementation productService;
 
     @Test
     void testGetAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        assertEquals(6, products.size());
+        List<ProductDetails> productDetails = productService.getAllProducts();
+        assertEquals(6, productDetails.size());
     }
 
     @Test
     void testGetProductById() {
-        Product product = productService.getProductById(2L);
-        assertNotNull(product);
-        assertEquals(2L, product.getId());
+        ProductDetails productDetails = productService.getProductById(2L);
+        assertNotNull(productDetails);
+        assertEquals(2L, productDetails.getId());
     }
 
     @Test
@@ -42,27 +42,27 @@ public class ProductServiceImplementationTest {
 
     @Test
     void testCreateProduct() {
-        Product newProduct = Product.builder().name("Test product").description("Test product").build();
-        Product createdProduct = productService.createProduct(newProduct);
-        assertNotNull(createdProduct);
-        assertEquals(7L, createdProduct.getId());
+        ProductDetails newProductDetails = ProductDetails.builder().name("Test product").description("Test product").build();
+        ProductDetails createdProductDetails = productService.createProduct(newProductDetails);
+        assertNotNull(createdProductDetails);
+        assertEquals(7L, createdProductDetails.getId());
     }
 
     @Test
     void testUpdateProduct() {
-        Product newProduct = Product.builder().id(1L).name("Updated Космічне молоко").category(CategoryType.COSMOFOOD).description("Updated description").price(99.99).build();
-        Product result = productService.updateProduct(newProduct);
+        ProductDetails newProductDetails = ProductDetails.builder().id(1L).name("Updated Космічне молоко").categoryType(CategoryType.COSMOFOOD).description("Updated description").price(99.99).build();
+        ProductDetails result = productService.updateProduct(newProductDetails);
         assertNotNull(result);
-        assertEquals(newProduct.getName(), result.getName());
-        assertEquals(newProduct.getDescription(), result.getDescription());
-        assertEquals(newProduct.getPrice(), result.getPrice());
-        assertEquals(newProduct.getCategory(), result.getCategory());
+        assertEquals(newProductDetails.getName(), result.getName());
+        assertEquals(newProductDetails.getDescription(), result.getDescription());
+        assertEquals(newProductDetails.getPrice(), result.getPrice());
+        assertEquals(newProductDetails.getCategoryType(), result.getCategoryType());
     }
 
     @Test
     void testUpdateProductNotFound() {
-        Product newProduct = Product.builder().id(100L).name("Updated Космічне молоко").build();
-        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(newProduct));
+        ProductDetails newProductDetails = ProductDetails.builder().id(100L).name("Updated Космічне молоко").build();
+        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(newProductDetails));
     }
 
     @Test

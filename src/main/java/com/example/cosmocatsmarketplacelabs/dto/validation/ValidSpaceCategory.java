@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = SpaceCategoryValidator.class)
 @Documented
 public @interface ValidSpaceCategory {
-    String message() default "Invalid Space Category it must be: CosmoFood, Clothes, Devices, Toys, Accessories, or Other if you didn't find right category";
+    String message() default "Invalid Space Category it must be: CosmoFood, Clothes, Devices, Toys, Accessories, or Other if you didn't find right categoryType";
 
     Class<?>[] groups() default {};
 
