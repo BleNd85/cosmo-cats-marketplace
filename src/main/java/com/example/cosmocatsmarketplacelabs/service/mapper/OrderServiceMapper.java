@@ -14,7 +14,6 @@ import java.util.List;
 public interface OrderServiceMapper {
 
     @Mapping(target = "orderId", source = "orderId")
-    @Mapping(target = "catName", source = "catName")
     @Mapping(target = "orderItems", source = "orderItems", qualifiedByName = "toOrderEntryDto")
     OrderDto toOrderDto(OrderDetails orderDetails);
 
@@ -30,7 +29,6 @@ public interface OrderServiceMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "orderId", expression = "java(java.util.UUID.randomUUID())")
-    @Mapping(target = "catName", source = "catName")
     @Mapping(target = "orderItems", source = "orderItems", qualifiedByName = "toOrderEntryDetails")
     OrderDetails toOrderDetails(OrderDto orderDto);
 

@@ -15,6 +15,5 @@ import java.util.UUID;
 public class OrderDetails {
     Long id;
     UUID orderId;
-    String catName;
     List<OrderEntryDetails> orderItems;
 }

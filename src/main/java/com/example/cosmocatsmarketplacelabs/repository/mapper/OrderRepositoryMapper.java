@@ -15,7 +15,6 @@ public interface OrderRepositoryMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "orderId", source = "orderId")
-    @Mapping(target = "catName", source = "catName")
     @Mapping(target = "orderItems", source = "orderItems", qualifiedByName = "toOrderEntryDetails")
     @Named("toOrderDetails")
     OrderDetails toOrderDetails(OrderEntity orderEntity);
@@ -32,7 +31,6 @@ public interface OrderRepositoryMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "orderId", source = "orderId")
-    @Mapping(target = "catName", source = "catName")
     @Mapping(target = "orderItems", source = "orderItems", qualifiedByName = "toOrderEntryEntity")
     @Named("toOrderEntity")
     OrderEntity toOrderEntity(OrderDetails orderDetails);

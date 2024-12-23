@@ -15,6 +15,5 @@ import java.util.UUID;
 public class OrderDto {
 
     private UUID orderId;
-    String catName;
     private List<OrderEntryDto> orderItems;
 }

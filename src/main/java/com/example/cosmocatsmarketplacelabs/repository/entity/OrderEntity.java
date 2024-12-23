@@ -1,10 +1,7 @@
 package com.example.cosmocatsmarketplacelabs.repository.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import java.util.List;
@@ -26,9 +23,6 @@ public class OrderEntity {
     @NaturalId
     @Column(name = "order_id", unique = true, nullable = false)
     private UUID orderId;
-
-    @Column(name = "cat_name", nullable = false)
-    private String catName;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderEntryEntity> orderItems;

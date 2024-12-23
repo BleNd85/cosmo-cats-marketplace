@@ -6,7 +6,6 @@ import com.example.cosmocatsmarketplacelabs.repository.entity.ProductEntity;
 import com.example.cosmocatsmarketplacelabs.repository.mapper.ProductRepositoryMapper;
 import com.example.cosmocatsmarketplacelabs.service.ProductService;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Slf4j
 public class ProductServiceImplementation implements ProductService {
     private final ProductRepositoryMapper productRepositoryMapper;
     private final ProductRepository productRepository;
