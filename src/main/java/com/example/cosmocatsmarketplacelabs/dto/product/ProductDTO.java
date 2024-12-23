@@ -19,7 +19,7 @@ import java.util.UUID;
 @GroupSequence({ProductDTO.class, ExtendedValidation.class})
 public class ProductDTO {
 
-    private UUID productReference;
+    private UUID productId;
 
     @Schema(description = "Name of the product")
     @NotBlank(message = "Name is mandatory")
@@ -39,6 +39,6 @@ public class ProductDTO {
     @Schema(description = "Category of the product")
     @NotEmpty(message = "Category can't be empty")
     @ValidSpaceCategory(groups = ExtendedValidation.class)
-    private String category;
+    private String categoryType;
 
 }

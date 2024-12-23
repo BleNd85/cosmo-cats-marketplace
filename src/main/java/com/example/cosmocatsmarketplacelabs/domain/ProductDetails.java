@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 public class ProductDetails {
     Long id;
-    UUID productReference;
+    UUID productId;
     Double price;
     String name;
     CategoryType categoryType;

@@ -7,13 +7,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProductRepositoryMapper {
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "productReference", source = "productReference")
+    @Mapping(target = "productId", source = "productId")
     @Mapping(target = "price", source = "price")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "description", source = "description")
@@ -24,7 +25,7 @@ public interface ProductRepositoryMapper {
     List<ProductDetails> toProductDetails(List<ProductEntity> productEntity);
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "productReference", source = "productReference")
+    @Mapping(target = "productId", source = "productId")
     @Mapping(target = "price", source = "price")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "description", source = "description")
@@ -35,8 +36,9 @@ public interface ProductRepositoryMapper {
     List<ProductEntity> toProductEntity(List<ProductDetails> productDetails);
 
     default List<CategoryType> categoryToList(CategoryType categoryType) {
-        return categoryType != null ? List.of(categoryType) : List.of();
+        return categoryType != null ? List.of(categoryType) : new ArrayList<>();
     }
+
     default CategoryType listToCategoryType(List<CategoryType> categoryType) {
         return categoryType != null && !categoryType.isEmpty() ? categoryType.get(0) : null;
     }

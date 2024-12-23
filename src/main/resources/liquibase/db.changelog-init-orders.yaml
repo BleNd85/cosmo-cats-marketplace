@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: lab3-3
+      author: Vlad
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: orders_id_seq
+            startValue: 1
+
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_orders
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: order_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: cat_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: cosmic_cat_id
+                  type: BIGINT
+            tableName: orders
+
+        - addUniqueConstraint:
+            columnNames: order_id
+            constraintName: uc_orders_order
+            tableName: orders
+
+        - addForeignKeyConstraint:
+            baseColumnNames: cosmic_cat_id
+            baseTableName: orders
+            constraintName: FK_ORDERS_ON_COSMIC_CAT
+            referencedColumnNames: id
+            referencedTableName: cosmic_cats
+

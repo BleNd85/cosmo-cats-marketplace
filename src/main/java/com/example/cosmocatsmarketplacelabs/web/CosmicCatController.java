@@ -28,4 +28,8 @@ public class CosmicCatController {
     public ResponseEntity<List<CosmicCatDto>> getCosmicCats() {
         return ResponseEntity.ok(cosmicCatServiceMapper.toCosmicCatDTO(cosmicCatService.getAllCosmicCats()));
     }
+
+
+
+
 }

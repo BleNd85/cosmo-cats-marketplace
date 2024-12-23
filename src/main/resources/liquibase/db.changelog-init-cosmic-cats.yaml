@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: lab3-1
+      author: Vlad
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: cosmic_cat_id_seq
+            startValue: 1
+
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_cosmic_cats
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: cosmic_cat_reference
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: cat_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: real_name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: cat_mail
+                  type: VARCHAR(255)
+            tableName: cosmic_cats
+
+        - addUniqueConstraint:
+            columnNames: cat_mail
+            constraintName: uc_cosmic_cats_cat_mail
+            tableName: cosmic_cats
+
+        - addUniqueConstraint:
+            columnNames: cosmic_cat_reference
+            constraintName: uc_cosmic_cats_cosmiccatreference
+            tableName: cosmic_cats
+

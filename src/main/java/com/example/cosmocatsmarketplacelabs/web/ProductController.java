@@ -1,6 +1,5 @@
 package com.example.cosmocatsmarketplacelabs.web;
 
-import com.example.cosmocatsmarketplacelabs.domain.ProductDetails;
 import com.example.cosmocatsmarketplacelabs.dto.product.ProductDTO;
 import com.example.cosmocatsmarketplacelabs.featuretoggle.FeatureToggles;
 import com.example.cosmocatsmarketplacelabs.featuretoggle.annotation.FeatureToggle;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/products")
@@ -26,32 +26,30 @@ public class ProductController {
     @FeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     @GetMapping()
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return ResponseEntity.ok(productServiceMapper.toProductDtoList(productService.getAllProducts()));
-    }
-
-   /* @FeatureToggle(FeatureToggles.KITTY_PRODUCTS)
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(productServiceMapper.toProductDto(productService.getProductById(id)));
+        return ResponseEntity.ok(productServiceMapper.toProductDto(productService.getAllProducts()));
     }
 
     @FeatureToggle(FeatureToggles.KITTY_PRODUCTS)
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductDTO> getProductByProductId(@PathVariable UUID productId) {
+        return ResponseEntity.ok(productServiceMapper.toProductDto(productService.getProductByProductId(productId)));
+    }
+
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody @Valid ProductDTO productDTO) {
-        return ResponseEntity.ok(productServiceMapper.toProductDto(productService.createProduct(productServiceMapper.toProductDetails(productDTO))));
+        return ResponseEntity.ok(productServiceMapper.toProductDto(
+                productService.saveProduct(productServiceMapper.toProductDetails(productDTO))));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO) {
-        ProductDetails productDetails = productServiceMapper.toProductDetails(productDTO);
-        productDetails.setId(id);
-        return ResponseEntity.ok(productServiceMapper.toProductDto(productService.updateProduct(productDetails)));
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID productId, @RequestBody @Valid ProductDTO productDTO) {
+        return ResponseEntity.ok(productServiceMapper.toProductDto(productService
+                .saveProduct(productId, productServiceMapper.toProductDetails(productDTO))));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
-        productService.deleteProductById(id);
-        return ResponseEntity.ok("Product was successfully deleted");
-    }*/
-
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.noContent().build();
+    }
 }

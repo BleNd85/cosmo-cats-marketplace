@@ -12,28 +12,26 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductServiceMapper {
 
-    @Mapping(target = "productReference", source = "productReference")
+    @Mapping(target = "productId", source = "productId")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "description", source = "description")
     @Mapping(target = "price", source = "price")
-    @Mapping(target = "category", source = "categoryType", qualifiedByName = "toCategoryString")
+    @Mapping(target = "categoryType", source = "categoryType", qualifiedByName = "toCategoryString")
     @Named("toProductDto")
     ProductDTO toProductDto(ProductDetails productDetails);
 
     List<ProductDTO> toProductDto(List<ProductDetails> productDetailsList);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "productReference", expression = "java(java.util.UUID.randomUUID())")
+    @Mapping(target = "productId", expression = "java(java.util.UUID.randomUUID())")
     @Mapping(target = "price", source = "price")
     @Mapping(target = "name", source = "name")
-    @Mapping(target = "categoryType", source = "category", qualifiedByName = "toCategoryType")
+    @Mapping(target = "categoryType", source = "categoryType", qualifiedByName = "toCategoryType")
     @Mapping(target = "description", source = "description")
     ProductDetails toProductDetails(ProductDTO productDto);
 
-    List<ProductDTO> toProductDtoList(List<ProductDetails> productDetails);
-
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "productReference", source = "productReference")
+    @Mapping(target = "productId", source = "productId")
     @Mapping(target = "price", ignore = true)
     @Mapping(target = "name", ignore = true)
     @Mapping(target = "categoryType", ignore = true)
@@ -45,7 +43,6 @@ public interface ProductServiceMapper {
     default String toCategoryString(CategoryType categoryType) {
         return categoryType.getDisplayName();
     }
-
     @Named("toCategoryType")
     default CategoryType toCategoryType(String categoryString) {
         return CategoryType.valueOf(categoryString.toUpperCase());
