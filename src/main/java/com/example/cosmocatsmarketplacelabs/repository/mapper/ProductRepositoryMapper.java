@@ -36,7 +36,11 @@ public interface ProductRepositoryMapper {
     List<ProductEntity> toProductEntity(List<ProductDetails> productDetails);
 
     default List<CategoryType> categoryToList(CategoryType categoryType) {
-        return categoryType != null ? List.of(categoryType) : new ArrayList<>();
+        List<CategoryType> categories = new ArrayList<>();
+        if (categoryType != null) {
+            categories.add(categoryType);
+        }
+        return categories;
     }
 
     default CategoryType listToCategoryType(List<CategoryType> categoryType) {

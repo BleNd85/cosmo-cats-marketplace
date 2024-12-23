@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public class ProductEntity {
     @ElementCollection(targetClass = CategoryType.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "product_categories", joinColumns = @JoinColumn(name = "product_id"))
     @Enumerated(EnumType.ORDINAL)
-    private List<CategoryType> categoryType;
+    private List<CategoryType> categoryType = new ArrayList<>();
 
     @Column(nullable = false)
     private String description;

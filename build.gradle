@@ -52,9 +52,14 @@ dependencies {
     compileOnly 'org.mapstruct:mapstruct:1.6.2'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation "org.wiremock:wiremock-jetty12:3.9.2"
     testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testCompileOnly 'org.projectlombok:lombok:1.18.34'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/products")
+@RequestMapping("/api/v1/products")
 public class ProductController {
     private final ProductService productService;
     private final ProductServiceMapper productServiceMapper;
@@ -24,12 +24,11 @@ public class ProductController {
     }
 
     @FeatureToggle(FeatureToggles.KITTY_PRODUCTS)
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         return ResponseEntity.ok(productServiceMapper.toProductDto(productService.getAllProducts()));
     }
 
-    @FeatureToggle(FeatureToggles.KITTY_PRODUCTS)
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDTO> getProductByProductId(@PathVariable UUID productId) {
         return ResponseEntity.ok(productServiceMapper.toProductDto(productService.getProductByProductId(productId)));

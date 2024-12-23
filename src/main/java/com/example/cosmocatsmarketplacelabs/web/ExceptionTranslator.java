@@ -40,7 +40,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(CosmicCatNofFoundException.class)
-    public ResponseEntity<ProblemDetail> handleProductNotFoundException(CosmicCatNofFoundException ex) {
+    public ResponseEntity<ProblemDetail> handleCosmicCatNofFoundException(CosmicCatNofFoundException ex) {
         log.info("Cosmic Cat Not Found exception raised");
         ProblemDetail problemDetail = forStatusAndDetail(NOT_FOUND, ex.getMessage());
         problemDetail.setType(create("cosmic-cat-not-found"));
@@ -49,7 +49,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(OrderNotFoundException.class)
-    public ResponseEntity<ProblemDetail> handleProductNotFoundException(OrderNotFoundException ex) {
+    public ResponseEntity<ProblemDetail> handleOrderNotFoundException(OrderNotFoundException ex) {
         log.info("Order Not Found exception raised");
         ProblemDetail problemDetail = forStatusAndDetail(NOT_FOUND, ex.getMessage());
         problemDetail.setType(create("order-not-found"));

@@ -9,10 +9,11 @@ import com.example.cosmocatsmarketplacelabs.repository.entity.OrderEntity;
 import com.example.cosmocatsmarketplacelabs.repository.entity.OrderEntryEntity;
 import com.example.cosmocatsmarketplacelabs.repository.entity.ProductEntity;
 import com.example.cosmocatsmarketplacelabs.repository.mapper.OrderRepositoryMapper;
+import com.example.cosmocatsmarketplacelabs.repository.mapper.ProductRepositoryMapper;
 import com.example.cosmocatsmarketplacelabs.service.OrderService;
+import com.example.cosmocatsmarketplacelabs.service.ProductService;
 import com.example.cosmocatsmarketplacelabs.service.exception.CosmicCatNofFoundException;
 import com.example.cosmocatsmarketplacelabs.service.exception.OrderNotFoundException;
-import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +27,17 @@ public class OrderServiceImplementation implements OrderService {
     private final OrderRepositoryMapper orderRepositoryMapper;
     private final CosmicCatRepository cosmicCatRepository;
     private final ProductRepository productRepository;
+    private final ProductRepositoryMapper productRepositoryMapper;
+    private final ProductService productService;
 
     public OrderServiceImplementation(OrderRepository orderRepository, OrderRepositoryMapper orderRepositoryMapper,
-                                      CosmicCatRepository cosmicCatRepository, ProductRepository productRepository) {
+                                      CosmicCatRepository cosmicCatRepository, ProductRepository productRepository, ProductRepositoryMapper productRepositoryMapper, ProductService productService) {
         this.orderRepository = orderRepository;
         this.orderRepositoryMapper = orderRepositoryMapper;
         this.cosmicCatRepository = cosmicCatRepository;
         this.productRepository = productRepository;
+        this.productRepositoryMapper = productRepositoryMapper;
+        this.productService = productService;
     }
 
     @Override
@@ -67,9 +72,8 @@ public class OrderServiceImplementation implements OrderService {
         OrderEntity order = orderRepositoryMapper.toOrderEntity(orderDetails);
         List<OrderEntryEntity> orderEntryEntityList = order.getOrderItems().stream()
                 .peek(orderEntryItem -> {
-                    UUID productReference = orderEntryItem.getProduct().getProductId();
-                    ProductEntity productEntity = productRepository.findByNaturalId(productReference)
-                            .orElseThrow(() -> new ProductNotFoundException(productReference));
+                    UUID productId = orderEntryItem.getProduct().getProductId();
+                    ProductEntity productEntity = productRepositoryMapper.toProductEntity(productService.getProductByProductId(productId));
                     orderEntryItem.setProduct(productEntity);
                     orderEntryItem.setOrder(order);
                 }).toList();
@@ -79,6 +83,7 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(UUID orderId) {
         orderRepository.deleteByNaturalId(orderId);
     }
