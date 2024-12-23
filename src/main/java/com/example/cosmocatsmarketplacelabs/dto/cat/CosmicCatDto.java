@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CosmicCatDto {
 
-    private UUID catReference;
+    private UUID cosmicCatId;
 
     @Schema(description = "Name of the cat")
     @NotBlank(message = "Cat name is mandatory")
@@ -28,6 +28,7 @@ public class CosmicCatDto {
     private String realName;
 
     @Schema(description = "Mail of the cat")
+    @NotBlank(message = "Catmail is mandatory")
     @Email(message = "Catmail must be valid")
     private String catMail;
 

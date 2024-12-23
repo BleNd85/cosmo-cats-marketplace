@@ -11,7 +11,7 @@ import java.util.List;
 public interface CosmicCatRepositoryMapper {
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "cosmicCatReference", source = "cosmicCatReference")
+    @Mapping(target = "cosmicCatId", source = "cosmicCatId")
     @Mapping(target = "catName", source = "catName")
     @Mapping(target = "realName", source = "realName")
     @Mapping(target = "catMail", source = "catMail")
@@ -21,7 +21,7 @@ public interface CosmicCatRepositoryMapper {
     List<CosmicCatDetails> toCosmicCatDetails(List<CosmicCatEntity> cosmicCatEntities);
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "cosmicCatReference", source = "cosmicCatReference")
+    @Mapping(target = "cosmicCatId", source = "cosmicCatId")
     @Mapping(target = "catName", source = "catName")
     @Mapping(target = "realName", source = "realName")
     @Mapping(target = "catMail", source = "catMail")

@@ -8,11 +8,11 @@ import java.util.UUID;
 public interface ProductService {
     List<ProductDetails> getAllProducts();
 
-    ProductDetails getProductByProductId(UUID productReference);
+    ProductDetails getProductByProductId(UUID productId);
 
-    ProductDetails saveProduct(ProductDetails productDetails);
+    ProductDetails saveProduct(ProductDetails productId);
 
-    ProductDetails saveProduct(UUID productReference, ProductDetails productDetails);
+    ProductDetails saveProduct(UUID productId, ProductDetails productDetails);
 
-    void deleteProduct(UUID productReference);
+    void deleteProduct(UUID productId);
 }

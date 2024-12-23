@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CosmicCatDetails {
     Long id;
-    UUID cosmicCatReference;
+    UUID cosmicCatId;
     String catName;
     String realName;
     String catMail;

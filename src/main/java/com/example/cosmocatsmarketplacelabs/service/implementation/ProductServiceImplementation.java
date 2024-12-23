@@ -6,13 +6,11 @@ import com.example.cosmocatsmarketplacelabs.repository.entity.ProductEntity;
 import com.example.cosmocatsmarketplacelabs.repository.mapper.ProductRepositoryMapper;
 import com.example.cosmocatsmarketplacelabs.service.ProductService;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
-import com.example.cosmocatsmarketplacelabs.service.mapper.ProductServiceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,24 +33,24 @@ public class ProductServiceImplementation implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public ProductDetails getProductByProductId(UUID productReference) {
-        return productRepositoryMapper.toProductDetails(productRepository.findByNaturalId(productReference)
-                .orElseThrow(() -> new ProductNotFoundException(productReference)));
+    public ProductDetails getProductByProductId(UUID productId) {
+        return productRepositoryMapper.toProductDetails(productRepository.findByNaturalId(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId)));
     }
 
     @Override
     @Transactional(propagation = Propagation.NESTED)
-    public ProductDetails saveProduct(ProductDetails productDetails) {
+    public ProductDetails saveProduct(ProductDetails productId) {
         return productRepositoryMapper.toProductDetails(
-                productRepository.save(productRepositoryMapper.toProductEntity(productDetails)));
+                productRepository.save(productRepositoryMapper.toProductEntity(productId)));
     }
 
 
     @Override
     @Transactional(propagation = Propagation.NESTED)
-    public ProductDetails saveProduct(UUID productReference, ProductDetails productDetails) {
-        ProductEntity oldProduct = productRepository.findByNaturalId(productReference)
-                .orElseThrow(() -> new ProductNotFoundException(productReference));
+    public ProductDetails saveProduct(UUID productId, ProductDetails productDetails) {
+        ProductEntity oldProduct = productRepository.findByNaturalId(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
         oldProduct.setName(productDetails.getName());
         oldProduct.setDescription(productDetails.getDescription());
         oldProduct.setPrice(productDetails.getPrice());
@@ -63,9 +61,9 @@ public class ProductServiceImplementation implements ProductService {
 
     @Override
     @Transactional
-    public void deleteProduct(UUID productReference) {
-        productRepository.findByNaturalId(productReference);
-        productRepository.deleteByNaturalId(productReference);
+    public void deleteProduct(UUID productId) {
+        productRepository.findByNaturalId(productId);
+        productRepository.deleteByNaturalId(productId);
     }
 
 }

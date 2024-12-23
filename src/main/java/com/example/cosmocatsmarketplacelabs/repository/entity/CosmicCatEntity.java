@@ -25,7 +25,7 @@ public class CosmicCatEntity {
 
     @NaturalId
     @Column(unique = true, nullable = false)
-    private UUID cosmicCatReference;
+    private UUID cosmicCatId;
 
     @Column(name = "cat_name", nullable = false)
     private String catName;

@@ -1,6 +1,7 @@
 package com.example.cosmocatsmarketplacelabs.web;
 
 import com.example.cosmocatsmarketplacelabs.featuretoggle.exception.FeatureToggleNotEnabledException;
+import com.example.cosmocatsmarketplacelabs.service.exception.CosmicCatNofFoundException;
 import com.example.cosmocatsmarketplacelabs.service.exception.ParamsViolationException;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,15 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = forStatusAndDetail(NOT_FOUND, ex.getMessage());
         problemDetail.setType(create("product-not-found"));
         problemDetail.setTitle("Product Not Found");
+        return ResponseEntity.status(NOT_FOUND).body(problemDetail);
+    }
+
+    @ExceptionHandler(CosmicCatNofFoundException.class)
+    public ResponseEntity<ProblemDetail> handleProductNotFoundException(CosmicCatNofFoundException ex) {
+        log.info("Cosmic Cat Not Found exception raised");
+        ProblemDetail problemDetail = forStatusAndDetail(NOT_FOUND, ex.getMessage());
+        problemDetail.setType(create("cosmic-cat-not-found"));
+        problemDetail.setTitle("Cosmic Cat Not Found");
         return ResponseEntity.status(NOT_FOUND).body(problemDetail);
     }
 

@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Mapper(componentModel = "spring")
 public interface CosmicCatServiceMapper {
-    @Mapping(source = "cosmicCatReference", target = "catReference")
+    @Mapping(source = "cosmicCatId", target = "cosmicCatId")
     @Mapping(source = "catName", target = "catName")
     @Mapping(source = "realName", target = "realName")
     @Mapping(source = "catMail", target = "catMail")
@@ -23,7 +23,7 @@ public interface CosmicCatServiceMapper {
     List<CosmicCatDto> toCosmicCatDTO(List<CosmicCatDetails> cosmicCatDetails);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "cosmicCatReference", expression = "java(java.util.UUID.randomUUID())")
+    @Mapping(target = "cosmicCatId", expression = "java(java.util.UUID.randomUUID())")
     @Mapping(target = "catName", source = "catName")
     @Mapping(source = "realName", target = "realName")
     @Mapping(source = "catMail", target = "catMail")
