@@ -1,5 +1,6 @@
 package com.example.cosmocatsmarketplacelabs.config;
 
+import com.example.cosmocatsmarketplacelabs.service.mapper.CosmicCatMapper;
 import com.example.cosmocatsmarketplacelabs.service.mapper.ProductMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -10,5 +11,10 @@ public class MappersTestConfiguration {
     @Bean
     public ProductMapper productMapper() {
         return Mappers.getMapper(ProductMapper.class);
+    }
+
+    @Bean
+    public CosmicCatMapper cosmicCatMapper() {
+        return Mappers.getMapper(CosmicCatMapper.class);
     }
 }
