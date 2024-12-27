@@ -23,6 +23,7 @@ public class CosmicCatController {
         this.cosmicCatServiceMapper = cosmicCatServiceMapper;
     }
 
+/*    @PreAuthorize("hasRole('COSMO_ADMIN')")*/
     @FeatureToggle(FeatureToggles.COSMO_CATS)
     @GetMapping
     public ResponseEntity<List<CosmicCatDto>> getCosmicCats() {
