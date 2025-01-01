@@ -1,11 +1,11 @@
 package com.example.cosmocatsmarketplacelabs.web;
 
-import com.example.cosmocatsmarketplacelabs.domain.order.OrderDetails;
 import com.example.cosmocatsmarketplacelabs.dto.order.OrderDto;
 import com.example.cosmocatsmarketplacelabs.service.OrderService;
 import com.example.cosmocatsmarketplacelabs.service.mapper.OrderServiceMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,10 +22,10 @@ public class OrderController {
         this.orderServiceMapper = orderServiceMapper;
     }
 
-
+    @PreAuthorize("hasRole('COSMO_ADMIN')")
     @GetMapping
-    public ResponseEntity<List<OrderDetails>> getOrders() {
-        return ResponseEntity.ok(orderService.getOrders());
+    public ResponseEntity<List<OrderDto>> getOrders() {
+        return ResponseEntity.ok(orderServiceMapper.toOrderDto(orderService.getOrders()));
     }
 
     @GetMapping("/{orderId}")
