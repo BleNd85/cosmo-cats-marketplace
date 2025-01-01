@@ -1,78 +1,132 @@
 package com.example.cosmocatsmarketplacelabs.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import com.example.cosmocatsmarketplacelabs.common.CategoryType;
 import com.example.cosmocatsmarketplacelabs.config.MappersTestConfiguration;
-import com.example.cosmocatsmarketplacelabs.domain.Product;
+import com.example.cosmocatsmarketplacelabs.domain.ProductDetails;
+import com.example.cosmocatsmarketplacelabs.repository.ProductRepository;
+import com.example.cosmocatsmarketplacelabs.repository.entity.ProductEntity;
+import com.example.cosmocatsmarketplacelabs.repository.mapper.ProductRepositoryMapper;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
 import com.example.cosmocatsmarketplacelabs.service.implementation.ProductServiceImplementation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @SpringBootTest(classes = {ProductServiceImplementation.class})
 @Import({MappersTestConfiguration.class})
+@ExtendWith(MockitoExtension.class)
 @DisplayName("Product Service Test")
 public class ProductServiceImplementationTest {
     @Autowired
     private ProductServiceImplementation productService;
 
+    @MockBean
+    private ProductRepository productRepository;
+
+    @MockBean
+    private ProductRepositoryMapper productRepositoryMapper;
+
     @Test
     void testGetAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        assertEquals(6, products.size());
+        List<ProductEntity> productEntities = List.of(new ProductEntity());
+        List<ProductDetails> productDetails = List.of(new ProductDetails());
+
+        when(productRepository.findAll()).thenReturn(productEntities);
+        when(productRepositoryMapper.toProductDetails(productEntities)).thenReturn(productDetails);
+
+        List<ProductDetails> result = productService.getAllProducts();
+        assertEquals(productDetails, result);
     }
 
     @Test
     void testGetProductById() {
-        Product product = productService.getProductById(2L);
-        assertNotNull(product);
-        assertEquals(2L, product.getId());
+        UUID productId = UUID.randomUUID();
+        ProductEntity productEntity = new ProductEntity();
+        ProductDetails productDetails = new ProductDetails();
+
+        when(productRepository.findByNaturalId(productId)).thenReturn(Optional.of(productEntity));
+        when(productRepositoryMapper.toProductDetails(productEntity)).thenReturn(productDetails);
+
+        ProductDetails result = productService.getProductByProductId(productId);
+        assertEquals(productDetails, result);
     }
 
     @Test
     void testGetProductByIdNotFound() {
-        assertThrows(ProductNotFoundException.class, () -> productService.getProductById(100L));
+        UUID productId = UUID.randomUUID();
+
+        when(productRepository.findByNaturalId(productId)).thenReturn(Optional.empty());
+
+        assertThrows(ProductNotFoundException.class,
+                () -> productService.getProductByProductId(productId));
     }
 
     @Test
-    void testCreateProduct() {
-        Product newProduct = Product.builder().name("Test product").description("Test product").build();
-        Product createdProduct = productService.createProduct(newProduct);
-        assertNotNull(createdProduct);
-        assertEquals(7L, createdProduct.getId());
+    void testSaveProduct() {
+        ProductDetails productDetails = new ProductDetails();
+        ProductEntity productEntity = new ProductEntity();
+        ProductEntity savedEntity = new ProductEntity();
+        ProductDetails savedDetails = new ProductDetails();
+
+        when(productRepositoryMapper.toProductEntity(productDetails)).thenReturn(productEntity);
+        when(productRepository.save(productEntity)).thenReturn(savedEntity);
+        when(productRepositoryMapper.toProductDetails(savedEntity)).thenReturn(savedDetails);
+
+        ProductDetails result = productService.saveProduct(productDetails);
+        assertEquals(savedDetails, result);
     }
 
     @Test
     void testUpdateProduct() {
-        Product newProduct = Product.builder().id(1L).name("Updated Космічне молоко").category(CategoryType.COSMOFOOD).description("Updated description").price(99.99).build();
-        Product result = productService.updateProduct(newProduct);
-        assertNotNull(result);
-        assertEquals(newProduct.getName(), result.getName());
-        assertEquals(newProduct.getDescription(), result.getDescription());
-        assertEquals(newProduct.getPrice(), result.getPrice());
-        assertEquals(newProduct.getCategory(), result.getCategory());
+        UUID productId = UUID.randomUUID();
+        ProductDetails productDetails = new ProductDetails();
+        productDetails.setCategoryType(CategoryType.ACCESSORIES);
+        ProductEntity existingEntity = new ProductEntity();
+        ProductEntity savedEntity = new ProductEntity();
+        ProductDetails savedDetails = new ProductDetails();
+
+        when(productRepository.findByNaturalId(productId)).thenReturn(Optional.of(existingEntity));
+        when(productRepository.save(existingEntity)).thenReturn(savedEntity);
+        when(productRepositoryMapper.toProductDetails(savedEntity)).thenReturn(savedDetails);
+
+        ProductDetails result = productService.saveProduct(productId, productDetails);
+        assertEquals(savedDetails, result);
     }
 
     @Test
     void testUpdateProductNotFound() {
-        Product newProduct = Product.builder().id(100L).name("Updated Космічне молоко").build();
-        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(newProduct));
+        UUID productId = UUID.randomUUID();
+        ProductDetails productDetails = new ProductDetails();
+
+        when(productRepository.findByNaturalId(productId)).thenReturn(Optional.empty());
+
+        assertThrows(ProductNotFoundException.class,
+                () -> productService.saveProduct(productId, productDetails));
     }
 
     @Test
-    void testDeleteProductById() {
-        productService.deleteProductById(1L);
-        assertThrows(ProductNotFoundException.class, () -> productService.getProductById(1L));
+    void testDeleteProduct() {
+        UUID productId = UUID.randomUUID();
+        ProductEntity entity = new ProductEntity();
+
+        when(productRepository.findByNaturalId(productId)).thenReturn(Optional.of(entity));
+        doNothing().when(productRepository).deleteByNaturalId(productId);
+
+        productService.deleteProduct(productId);
+
+        verify(productRepository, times(1)).deleteByNaturalId(productId);
     }
 
-    @Test
-    void testDeleteProductByIdNotFound() {
-        assertThrows(ProductNotFoundException.class, () -> productService.deleteProductById(100L));
-    }
 }

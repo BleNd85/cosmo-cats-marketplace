@@ -1,19 +1,18 @@
 package com.example.cosmocatsmarketplacelabs.service;
 
-import com.example.cosmocatsmarketplacelabs.domain.Product;
+import com.example.cosmocatsmarketplacelabs.domain.ProductDetails;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ProductService {
-    List<Product> getAllProducts();
+    List<ProductDetails> getAllProducts();
 
-    Product getProductById(Long id);
+    ProductDetails getProductByProductId(UUID productId);
 
-    Product createProduct(Product product);
+    ProductDetails saveProduct(ProductDetails productId);
 
-    Product updateProduct(Product product);
+    ProductDetails saveProduct(UUID productId, ProductDetails productDetails);
 
-    void deleteProductById(Long id);
-
-    void cleanProductList();
+    void deleteProduct(UUID productId);
 }

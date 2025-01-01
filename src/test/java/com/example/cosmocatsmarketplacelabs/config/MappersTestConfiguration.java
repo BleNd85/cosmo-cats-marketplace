@@ -1,7 +1,8 @@
 package com.example.cosmocatsmarketplacelabs.config;
 
-import com.example.cosmocatsmarketplacelabs.service.mapper.CosmicCatMapper;
-import com.example.cosmocatsmarketplacelabs.service.mapper.ProductMapper;
+import com.example.cosmocatsmarketplacelabs.service.mapper.CosmicCatServiceMapper;
+import com.example.cosmocatsmarketplacelabs.service.mapper.OrderServiceMapper;
+import com.example.cosmocatsmarketplacelabs.service.mapper.ProductServiceMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -9,12 +10,17 @@ import org.springframework.context.annotation.Bean;
 @TestConfiguration
 public class MappersTestConfiguration {
     @Bean
-    public ProductMapper productMapper() {
-        return Mappers.getMapper(ProductMapper.class);
+    public ProductServiceMapper productMapper() {
+        return Mappers.getMapper(ProductServiceMapper.class);
     }
 
     @Bean
-    public CosmicCatMapper cosmicCatMapper() {
-        return Mappers.getMapper(CosmicCatMapper.class);
+    public CosmicCatServiceMapper cosmicCatMapper() {
+        return Mappers.getMapper(CosmicCatServiceMapper.class);
+    }
+
+    @Bean
+    public OrderServiceMapper orderServiceMapper() {
+        return Mappers.getMapper(OrderServiceMapper.class);
     }
 }

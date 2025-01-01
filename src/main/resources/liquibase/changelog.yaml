@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/db.changelog-init-cosmic-cats.yaml
+  - include:
+      file: liquibase/db.changelog-init-product.yaml
+  - include:
+      file: liquibase/db.changelog-init-orders.yaml
+  - include:
+      file: liquibase/db.changelog-init-order-entries.yaml

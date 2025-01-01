@@ -1,97 +1,67 @@
 package com.example.cosmocatsmarketplacelabs.service.implementation;
 
-import com.example.cosmocatsmarketplacelabs.common.CategoryType;
-import com.example.cosmocatsmarketplacelabs.domain.Product;
+import com.example.cosmocatsmarketplacelabs.domain.ProductDetails;
+import com.example.cosmocatsmarketplacelabs.repository.ProductRepository;
+import com.example.cosmocatsmarketplacelabs.repository.entity.ProductEntity;
+import com.example.cosmocatsmarketplacelabs.repository.mapper.ProductRepositoryMapper;
 import com.example.cosmocatsmarketplacelabs.service.ProductService;
 import com.example.cosmocatsmarketplacelabs.service.exception.ProductNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductServiceImplementation implements ProductService {
-    private final List<Product> listOfProducts = createProductList();
+    private final ProductRepositoryMapper productRepositoryMapper;
+    private final ProductRepository productRepository;
 
-    @Override
-    public List<Product> getAllProducts() {
-        return listOfProducts;
+    public ProductServiceImplementation(ProductRepositoryMapper productRepositoryMapper, ProductRepository productRepository) {
+        this.productRepositoryMapper = productRepositoryMapper;
+        this.productRepository = productRepository;
     }
 
     @Override
-    public Product getProductById(Long id) {
-        return listOfProducts.stream()
-                .filter(product -> product.getId().equals(id)).
-                findFirst()
-                .orElseThrow(() -> new ProductNotFoundException(id));
+    @Transactional(readOnly = true)
+    public List<ProductDetails> getAllProducts() {
+        return productRepositoryMapper.toProductDetails(productRepository.findAll());
     }
 
     @Override
-    public Product createProduct(Product product) {
-        product.setId((long) listOfProducts.size() + 1);
-        listOfProducts.add(product);
-        return product;
+    @Transactional(readOnly = true)
+    public ProductDetails getProductByProductId(UUID productId) {
+        return productRepositoryMapper.toProductDetails(productRepository.findByNaturalId(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId)));
     }
 
     @Override
-    public Product updateProduct(Product product) {
-        Product oldProduct = listOfProducts.stream()
-                .filter(updatedProduct -> updatedProduct.getId().equals(product.getId())).findFirst().orElseThrow(() -> new ProductNotFoundException(product.getId()));
-        oldProduct.setCategory(product.getCategory());
-        oldProduct.setName(product.getName());
-        oldProduct.setDescription(product.getDescription());
-        oldProduct.setPrice(product.getPrice());
-        return oldProduct;
+    @Transactional(propagation = Propagation.NESTED)
+    public ProductDetails saveProduct(ProductDetails productId) {
+        return productRepositoryMapper.toProductDetails(
+                productRepository.save(productRepositoryMapper.toProductEntity(productId)));
+    }
+
+
+    @Override
+    @Transactional(propagation = Propagation.NESTED)
+    public ProductDetails saveProduct(UUID productId, ProductDetails productDetails) {
+        ProductEntity oldProduct = productRepository.findByNaturalId(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        oldProduct.setName(productDetails.getName());
+        oldProduct.setDescription(productDetails.getDescription());
+        oldProduct.setPrice(productDetails.getPrice());
+        oldProduct.setCategoryType(productRepositoryMapper.categoryToList(productDetails.getCategoryType()));
+        productRepository.save(oldProduct);
+        return productRepositoryMapper.toProductDetails(oldProduct);
     }
 
     @Override
-    public void deleteProductById(Long id) {
-        listOfProducts.remove(getProductById(id));
+    @Transactional
+    public void deleteProduct(UUID productId) {
+        productRepository.findByNaturalId(productId);
+        productRepository.deleteByNaturalId(productId);
     }
 
-    @Override
-    public void cleanProductList() {
-        listOfProducts.clear();
-    }
-
-    private List<Product> createProductList() {
-        List<Product> listOfProducts = new ArrayList<>();
-        listOfProducts.add(Product.builder()
-                .id(1L)
-                .name("Космічне молоко")
-                .category(CategoryType.COSMOFOOD)
-                .description("Молоко космічної корови")
-                .build());
-        listOfProducts.add(Product.builder()
-                .id(2L)
-                .name("Котячий скафандр")
-                .category(CategoryType.CLOTHES)
-                .description("Спеціальний скафандр, що ІДЕАЛЬНО підходить для космічних котиків")
-                .build());
-        listOfProducts.add(Product.builder()
-                .id(3L)
-                .name("Космічна хапалка")
-                .category(CategoryType.DEVICES)
-                .description("Котячий прилад, який допомагає космічним котикам у дослідах(У них же лапки!)")
-                .build());
-        listOfProducts.add(Product.builder()
-                .id(4L)
-                .name("Антигравітаційний клубок ниток")
-                .category(CategoryType.TOYS)
-                .description("Літаючий клубок, що слідує за котиком, змінює кольори і дарує невагомі ігри в космосі!")
-                .build());
-        listOfProducts.add(Product.builder()
-                .id(5L)
-                .name("Жетон справжнього котика-космонавта")
-                .category(CategoryType.ACCESSORIES)
-                .description("Блискучий символ галактичної відваги, який посвідчує, що його власник побував серед зірок і не раз ловив астероїди на льоту!")
-                .build());
-        listOfProducts.add(Product.builder()
-                .id(6L)
-                .name("Шерсть космічного котика")
-                .category(CategoryType.OTHER)
-                .description("Легендарний матеріал, що переливається зоряним пилом, гріє в холод вакууму і ідеально підходить для плетіння міжгалактичних теплих шкарпеток!")
-                .build());
-        return listOfProducts;
-    }
 }
